@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>현주야사랑해(약) 개인정보처리방침</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px 20px 64px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      line-height: 1.75;
+      color: #1a1a1a;
+      background: #ffffff;
+      word-break: keep-all;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #e6e6e6; background: #17181a; }
+      a { color: #7cb2ff; }
+      th { background: #23252a !important; }
+      td, th { border-color: #33363c !important; }
+      .meta, footer { color: #9aa0a6; }
+    }
+    h1 { font-size: 1.6rem; margin: 0 0 4px; }
+    h2 { font-size: 1.2rem; margin: 2.2em 0 0.6em; padding-top: 0.4em; border-top: 1px solid rgba(128,128,128,.25); }
+    h3 { font-size: 1.02rem; margin: 1.4em 0 0.4em; }
+    .meta { color: #666; font-size: 0.9rem; margin-bottom: 1.5em; }
+    ul { padding-left: 1.2em; }
+    li { margin: 0.3em 0; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95rem; }
+    th, td { border: 1px solid #d9dce1; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f4f6f8; }
+    code { background: rgba(128,128,128,.18); padding: 1px 5px; border-radius: 4px; font-size: 0.92em; }
+    .callout { background: rgba(120,160,255,.12); border-left: 4px solid #4d82ff; padding: 12px 16px; border-radius: 6px; margin: 1.2em 0; }
+    footer { margin-top: 3em; font-size: 0.85rem; color: #777; }
+    a { color: #1a5fd0; }
+  </style>
+</head>
+<body>
+  <h1>개인정보처리방침</h1>
+  <p class="meta">
+    앱 이름: <strong>현주야사랑해(약)</strong> (패키지: <code>com.heartbridge.app</code>)<br>
+    시행일: 2026년 8월 7일 · 최종 개정일: 2026년 8월 7일
+  </p>
+
+  <p>
+    본 개인정보처리방침은 개발자 <strong>최진근</strong>(이하 "개발자")이 제공하는 모바일 애플리케이션
+    <strong>현주야사랑해(약)</strong>(이하 "본 앱")의 개인정보 처리 방침을 설명합니다. 본 앱은
+    회원가입·로그인 없이 이용할 수 있는 의약품·의료기관 정보 안내 앱이며, 이용자의 개인정보를
+    수집하여 자체 서버에 저장하거나 제3자에게 판매·공유하지 않습니다.
+  </p>
+
+  <div class="callout">
+    <strong>요약</strong> — 본 앱은 별도의 계정을 만들지 않으며, 이름·이메일·전화번호 등 개인 식별정보를
+    수집하지 않습니다. 위치 정보와 카메라로 촬영한 이미지는 <strong>이용자 기기에서만</strong> 해당 기능을
+    수행하기 위해 사용되며, 개발자의 서버에 저장되지 않습니다.
+  </div>
+
+  <h2>1. 수집·이용하는 정보 및 목적</h2>
+  <p>본 앱은 다음의 정보에 접근하며, 각 정보는 명시된 기능 수행에만 사용됩니다.</p>
+  <table>
+    <thead>
+      <tr><th>정보 유형</th><th>이용 목적</th><th>처리 방식</th><th>필수 여부</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>위치 정보<br>(대략/정밀 위치)</td>
+        <td>이용자 현재 위치 기준 인근 병원·약국을 거리순으로 검색·표시</td>
+        <td>기기에서 공공데이터포털 오픈 API로 좌표를 직접 전송하여 주변 시설을 조회. 개발자 서버에 저장하지 않음</td>
+        <td>선택<br>(거부해도 이름·지역 검색 이용 가능)</td>
+      </tr>
+      <tr>
+        <td>카메라 및 사진<br>(촬영 이미지)</td>
+        <td>약봉투·처방전을 촬영해 약 이름을 자동 인식(OCR)하여 검색</td>
+        <td>이미지 인식은 <strong>기기 내부(온디바이스)</strong>에서만 수행. 촬영 이미지는 외부로 전송되거나 서버에 저장되지 않음</td>
+        <td>선택<br>(거부해도 직접 입력 검색 이용 가능)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. 수집하지 않는 정보</h2>
+  <p>본 앱은 다음 정보를 수집하지 않습니다.</p>
+  <ul>
+    <li>이름, 이메일 주소, 전화번호 등 개인 식별정보 (회원가입·로그인 기능 없음)</li>
+    <li>연락처, 통화 기록, 문자 메시지</li>
+    <li>광고 식별자(Advertising ID) 및 기타 기기 고유 식별자</li>
+    <li>분석·광고 목적의 사용 이력 (분석·광고 SDK를 포함하지 않음)</li>
+  </ul>
+
+  <h2>3. 제3자 제공 및 공유</h2>
+  <p>
+    개발자는 이용자의 개인정보를 제3자에게 판매·대여·공유하지 않습니다. 본 앱은 기능 수행을 위해
+    아래 공공기관의 공개 오픈 API를 호출하며, 이는 정보 <em>조회</em>를 위한 것으로 개인 식별정보의
+    제3자 제공에 해당하지 않습니다.
+  </p>
+  <ul>
+    <li>식품의약품안전처(MFDS) — 의약품 정보</li>
+    <li>국립중앙의료원(NMC) — 병원·약국 정보</li>
+    <li>공공데이터포털(data.go.kr) — 위치 기반 시설 조회</li>
+  </ul>
+  <p>
+    인근 시설 검색 시 이용자의 위치 좌표가 위 공공 API로 전송되나, 이는 주변 시설 조회 목적에 한하며
+    개발자는 이를 저장하거나 이용자와 연결하여 보관하지 않습니다.
+  </p>
+
+  <h2>4. 데이터 보관 및 삭제</h2>
+  <ul>
+    <li>개발자는 이용자의 개인정보를 자체 서버에 저장하지 않습니다.</li>
+    <li>검색 편의를 위한 임시 캐시 등 일부 데이터는 이용자 기기 내부에만 저장되며, <strong>앱을 삭제하면 함께 삭제</strong>됩니다.</li>
+    <li>서버에 보관되는 개인 데이터가 없으므로 별도의 삭제 요청 절차가 필요하지 않으나, 문의 사항이 있으면 아래 연락처로 요청하실 수 있습니다.</li>
+  </ul>
+
+  <h2>5. 데이터 보안</h2>
+  <ul>
+    <li>모든 네트워크 통신은 <strong>HTTPS(암호화 전송)</strong>로 이루어집니다.</li>
+    <li>카메라 이미지 인식(OCR)은 기기 내부에서만 처리되며 외부로 전송되지 않습니다.</li>
+  </ul>
+
+  <h2>6. 접근 권한 안내</h2>
+  <p>본 앱은 기능 수행에 필요한 최소한의 권한만 요청하며, 모든 권한은 선택 사항입니다.</p>
+  <ul>
+    <li><strong>위치</strong>(ACCESS_COARSE_LOCATION / ACCESS_FINE_LOCATION) — 인근 병원·약국 검색</li>
+    <li><strong>카메라</strong> — 약봉투·처방전 촬영을 통한 약 이름 인식</li>
+    <li><strong>인터넷</strong>(INTERNET) — 공공데이터 API를 통한 의약품·의료기관 정보 조회</li>
+  </ul>
+  <p>권한을 거부하더라도 해당 기능을 제외한 나머지 기능은 정상적으로 이용할 수 있습니다.</p>
+
+  <h2>7. 아동의 개인정보</h2>
+  <p>
+    본 앱은 만 13세 미만 아동을 주 대상으로 하지 않으며, 아동으로부터 고의로 개인정보를 수집하지 않습니다.
+  </p>
+
+  <h2>8. 본 방침의 변경</h2>
+  <p>
+    본 개인정보처리방침은 법령 또는 서비스 변경에 따라 개정될 수 있으며, 개정 시 본 페이지에 변경 내용과
+    개정일을 게시합니다.
+  </p>
+
+  <h2>9. 문의처</h2>
+  <p>
+    개인정보 처리에 관한 문의는 아래로 연락해 주세요.<br>
+    개발자: 최진근<br>
+    이메일: <a href="mailto:jk.choi1988@gmail.com">jk.choi1988@gmail.com</a>
+  </p>
+
+  <footer>
+    현주야사랑해(약) · 본 방침은 Google Play 사용자 데이터 정책에 따라 게시됩니다.
+  </footer>
+</body>
+</html>
