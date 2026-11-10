@@ -1,5 +1,26 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-20T01:57:55.000Z",
-  "codes": []
+  "updatedAt": "2026-11-10T11:32:37.000Z",
+  "codes": [
+    {
+      "id": "welcome-gems-20261110",
+      "hash": "eefa914ec3cf060d59cf9803e409d796003505fabe477f6ff9b392cb4f7f57fc",
+      "title": "환영 선물",
+      "reward": {
+        "gems": 1000
+      },
+      "start": "2026-11-10",
+      "end": "2027-12-31"
+    },
+    {
+      "id": "welcome2-gold-20261110",
+      "hash": "e06214250d2763a40de8d70329cd70d6078eef571b704dde27c498d42ff3fe4d",
+      "title": "환영 선물 2",
+      "reward": {
+        "gold": 20000
+      },
+      "start": "2026-11-10",
+      "end": "2027-12-31"
+    }
+  ]
 }
