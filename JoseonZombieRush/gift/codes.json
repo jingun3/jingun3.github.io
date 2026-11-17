@@ -1,5 +1,12 @@
 {
   "version": 1,
-  "codes": [],
+  "codes": [
+    {
+      "hash": "99a6c501d35437b7af5c6de784c27de2477a2a44dd9bf0892b81a8e008441834",
+      "coins": 1,
+      "title": "검증용(곧 삭제)",
+      "end": "2026-11-17"
+    }
+  ],
   "updated": "2026-11-17"
 }
