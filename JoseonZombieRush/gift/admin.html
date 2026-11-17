@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>선물 코드 관리 — 조선좀비러시</title>
+<style>
+  :root { --bg:#f6f3e9; --card:#fff; --text:#1d2620; --dim:#56604f; --line:#d9d2bd; --accent:#245c51; --warn:#9a2f22; --ok:#245c3a; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#151d19; --card:#1d2b24; --text:#ede3ca; --dim:#a9b29b; --line:#36463c; --accent:#9fd3c4; --warn:#ff9c8a; --ok:#9fe0b5; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif; }
+  main { max-width:880px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:22px; margin:0 0 4px; } h2 { font-size:17px; margin:28px 0 8px; }
+  .dim { color:var(--dim); font-size:13px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px 12px; }
+  label { display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--dim); }
+  input, textarea { font:inherit; color:var(--text); background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:9px 10px; min-height:40px; width:100%; }
+  textarea { font-family:ui-monospace,Consolas,monospace; font-size:12px; min-height:220px; }
+  button { font:inherit; border:1px solid var(--accent); background:var(--accent); color:var(--bg); border-radius:6px; padding:9px 14px; min-height:40px; cursor:pointer; }
+  button.ghost { background:transparent; color:var(--accent); }
+  button.danger { background:transparent; color:var(--warn); border-color:var(--warn); padding:4px 10px; min-height:32px; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center; }
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { border-bottom:1px solid var(--line); padding:7px 6px; text-align:left; white-space:nowrap; }
+  code { font-family:ui-monospace,Consolas,monospace; font-size:12px; }
+  .msg { margin-top:8px; font-size:13px; } .msg.ok { color:var(--ok); } .msg.err { color:var(--warn); }
+  ol { padding-left:20px; } li { margin:4px 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>선물 코드 관리</h1>
+<p class="dim">조선좀비러시 · 설정 → 「선물 코드 입력」에서 쓰는 코드 목록(<code>codes.json</code>)을 만드는 운영자 도구입니다.
+이 페이지는 아무 데도 저장하지 않습니다. 결과 JSON을 GitHub에 커밋해야 게임에 반영됩니다.</p>
+
+<div class="card">
+  <b>보안 방식</b>
+  <p class="dim" style="margin:4px 0 0">목록에는 코드 원문이 아니라 SHA-256 해시만 들어갑니다. 게임은 입력한 코드를 같은 방식으로 해시해 비교하고, 코드마다 기기(저장 데이터)당 한 번만 지급합니다.
+  서버가 없으므로 「전체 선착순 N명」 같은 총 사용 횟수 제한은 할 수 없습니다. 짧거나 추측하기 쉬운 코드는 피하세요(8자 이상 권장).</p>
+</div>
+
+<h2>1. 새 코드 추가</h2>
+<div class="card">
+  <div class="grid">
+    <label>코드 (영문·숫자·한글, 공백/하이픈 무시, 최대 24자)<input id="code" autocomplete="off" spellcheck="false" placeholder="DAWN2026"></label>
+    <label>표시 이름 (받을 때 보임, 40자)<input id="title" maxlength="40" placeholder="출시 기념 선물"></label>
+    <label>보상 엽전 (1~100000)<input id="coins" type="number" min="1" max="100000" value="100"></label>
+    <label>시작일 (비우면 즉시)<input id="start" type="date"></label>
+    <label>종료일 (비우면 무기한, 그날까지 포함)<input id="end" type="date"></label>
+  </div>
+  <div class="row"><button id="add">목록에 추가</button><button id="random" class="ghost">무작위 코드 만들기</button></div>
+  <div id="addMsg" class="msg" role="status"></div>
+</div>
+
+<h2>2. 현재 목록</h2>
+<div class="card">
+  <div class="row" style="margin-top:0"><button id="reload" class="ghost">게시된 목록 다시 불러오기</button><span id="loadMsg" class="dim"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>표시 이름</th><th>엽전</th><th>시작</th><th>종료</th><th>메모(코드 원문)</th><th>해시</th><th></th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+  <p class="dim">「메모」 열의 코드 원문은 이 페이지를 연 브라우저에만 잠시 보이며 JSON에는 들어가지 않습니다. 따로 적어 두세요.</p>
+</div>
+
+<h2>3. 게시하기</h2>
+<div class="card">
+  <ol>
+    <li>아래 JSON을 복사합니다.</li>
+    <li>「GitHub에서 편집」을 눌러 <code>JoseonZombieRush/gift/codes.json</code> 내용을 전부 지우고 붙여넣은 뒤 <b>Commit changes</b>를 누릅니다.</li>
+    <li>1~10분 뒤 게임에서 코드를 입력해 확인합니다.</li>
+  </ol>
+  <textarea id="json" readonly aria-label="codes.json"></textarea>
+  <div class="row"><button id="copy">JSON 복사</button><button id="download" class="ghost">파일로 저장</button>
+    <a href="https://github.com/jingun3/jingun3.github.io/edit/main/JoseonZombieRush/gift/codes.json" target="_blank" rel="noopener"><button class="ghost" type="button">GitHub에서 편집 ↗</button></a></div>
+  <div id="copyMsg" class="msg" role="status"></div>
+</div>
+
+<h2>코드 확인하기</h2>
+<div class="card">
+  <div class="grid"><label>코드<input id="check" autocomplete="off" spellcheck="false" placeholder="DAWN2026"></label></div>
+  <div class="row"><button id="checkBtn" class="ghost">목록에 있는지 확인</button></div>
+  <div id="checkMsg" class="msg" role="status"></div>
+</div>
+</main>
+<script>
+// Same rules as the game (prototype-web/game.mjs: GIFT_SALT, normalizeGiftCode).
+const SALT = 'JZR-GIFT:', MAXLEN = 24;
+const normalize = s => String(s ?? '').toUpperCase().replace(/[^0-9A-Z가-힣]/g, '').slice(0, MAXLEN);
+const sha256 = async text => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)))].map(b => b.toString(16).padStart(2, '0')).join('');
+const $ = id => document.getElementById(id);
+let list = { version: 1, codes: [] };
+const memo = new Map(); // hash -> plain code typed in this session only
+
+function say(id, text, tone = '') { const el = $(id); el.textContent = text; el.className = 'msg ' + tone; }
+function render() {
+  $('rows').innerHTML = '';
+  for (const c of list.codes) {
+    const tr = document.createElement('tr');
+    const cells = [c.title || '—', c.coins, c.start || '즉시', c.end || '무기한', memo.get(c.hash) || '—'];
+    for (const v of cells) { const td = document.createElement('td'); td.textContent = v; tr.appendChild(td); }
+    const h = document.createElement('td'); h.innerHTML = '<code></code>'; h.firstChild.textContent = c.hash.slice(0, 12) + '…'; tr.appendChild(h);
+    const del = document.createElement('td'); const b = document.createElement('button'); b.className = 'danger'; b.textContent = '삭제';
+    b.onclick = () => { if (!confirm(`「${c.title || c.hash.slice(0, 8)}」 코드를 목록에서 뺄까요? (게시해야 반영)`)) return; list.codes = list.codes.filter(x => x !== c); render(); };
+    del.appendChild(b); tr.appendChild(del); $('rows').appendChild(tr);
+  }
+  if (!list.codes.length) { const tr = document.createElement('tr'); tr.innerHTML = '<td colspan="7" class="dim">등록된 코드가 없습니다.</td>'; $('rows').appendChild(tr); }
+  list.updated = new Date().toISOString().slice(0, 10);
+  $('json').value = JSON.stringify(list, null, 2) + '\n';
+}
+async function load() {
+  say('loadMsg', '불러오는 중…');
+  try {
+    const r = await fetch('codes.json?t=' + Date.now(), { cache: 'no-store' });
+    const data = await r.json();
+    list = { version: 1, codes: Array.isArray(data.codes) ? data.codes.filter(c => c && /^[0-9a-f]{64}$/.test(c.hash)) : [] };
+    $('loadMsg').textContent = `게시된 목록 ${list.codes.length}개를 불러왔습니다.`;
+  } catch { $('loadMsg').textContent = '게시된 목록을 불러오지 못했습니다. 빈 목록에서 시작합니다.'; }
+  render();
+}
+$('random').onclick = () => {
+  const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', r = crypto.getRandomValues(new Uint8Array(10));
+  $('code').value = [...r].map(x => A[x % A.length]).join('');
+};
+$('add').onclick = async () => {
+  const code = normalize($('code').value), coins = Number($('coins').value), start = $('start').value, end = $('end').value;
+  if (code.length < 4) return say('addMsg', '코드는 4자 이상이어야 합니다 (8자 이상 권장).', 'err');
+  if (!Number.isSafeInteger(coins) || coins < 1 || coins > 100000) return say('addMsg', '보상 엽전은 1~100000 사이 정수여야 합니다.', 'err');
+  if (start && end && end < start) return say('addMsg', '종료일이 시작일보다 빠릅니다.', 'err');
+  const hash = await sha256(SALT + code);
+  if (list.codes.some(c => c.hash === hash)) return say('addMsg', '이미 목록에 있는 코드입니다.', 'err');
+  const entry = { hash, coins, title: $('title').value.trim().slice(0, 40) };
+  if (start) entry.start = start; if (end) entry.end = end;
+  list.codes.push(entry); memo.set(hash, code); render();
+  say('addMsg', `추가했습니다: ${code} → 엽전 ${coins}. 아래 3번에서 게시하세요.`, 'ok'); $('code').value = '';
+};
+$('reload').onclick = load;
+$('copy').onclick = async () => { try { await navigator.clipboard.writeText($('json').value); say('copyMsg', '복사했습니다. GitHub 편집 화면에 붙여넣으세요.', 'ok'); } catch { $('json').select(); say('copyMsg', '자동 복사가 막혔습니다. 텍스트 상자에서 Ctrl+C 하세요.', 'err'); } };
+$('download').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([$('json').value], { type: 'application/json' })); a.download = 'codes.json'; a.click(); URL.revokeObjectURL(a.href); };
+$('checkBtn').onclick = async () => {
+  const code = normalize($('check').value); if (!code) return say('checkMsg', '코드를 입력하세요.', 'err');
+  const hash = await sha256(SALT + code), c = list.codes.find(x => x.hash === hash);
+  say('checkMsg', c ? `있음: ${c.title || '(이름 없음)'} · 엽전 ${c.coins} · ${c.start || '즉시'} ~ ${c.end || '무기한'}` : '목록에 없는 코드입니다.', c ? 'ok' : 'err');
+};
+load();
+</script>
+</body>
+</html>
